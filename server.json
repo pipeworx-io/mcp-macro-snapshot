@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.pipeworx-io/macro-snapshot",
+  "title": "Macro Snapshot",
+  "description": "macro-snapshot MCP — the state of the economy in one call.",
+  "version": "0.1.0",
+  "websiteUrl": "https://pipeworx.io/packs/macro-snapshot",
+  "repository": {
+    "url": "https://github.com/pipeworx-io/mcp-macro-snapshot",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://gateway.pipeworx.io/macro-snapshot/mcp"
+    }
+  ]
+}
