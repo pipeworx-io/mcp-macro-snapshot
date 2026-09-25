@@ -2,13 +2,13 @@
 
 macro-snapshot MCP — the state of the economy in one call.
 
-Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 1476+ live data sources.
+Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 1679+ live data sources.
 
 ## Tools
 
 | Tool | Description |
 |------|-------------|
-| `macro_snapshot` | Get the current state of the US/global economy in ONE call — Fed funds rate, the full Treasury yield curve (3mo/2y/10y + 10y-2y and 10y-3m spreads with inversion flag), CPI & core CPI year-over-year, unemployment, nonfarm payrolls (+1mo change), real GDP growth, S&P 500, VIX, the broad USD index, and BTC. Composes 16 FRED series (Federal Reserve economic data) with live crypto, runs them in parallel, and returns a structured dashboard plus human-readable callouts (curve inversion, inflation vs the Fed's 2% target, elevated VIX). Use this instead of fetching ten indicators separately. No arguments. |
+| `macro_snapshot` | Get the current state of the US/global economy in ONE call — Fed funds rate, the full Treasury yield curve (3mo/2y/10y + 10y-2y and 10y-3m spreads with inversion flag), CPI & core CPI year-over-year, unemployment, nonfarm payrolls (+1mo change), real GDP growth, S&P 500, VIX, the broad USD index, and BTC. Composes 16 FRED series (Federal Reserve economic data) with live crypto, runs them in parallel, and returns a structured dashboard plus human-readable callouts (curve inversion, inflation vs the Fed's 2% target, elevated VIX). Use this instead of fetching ten indicators separately. No arguments. THE COMPONENTS DO NOT SHARE A DATE — daily series (rates, markets) sit beside quarterly GDP that can be 100+ days older; each group carries its own `as_of` map and `freshness` states the full span and oldest component — read those before comparing fields against the top-level `as_of`, which is only the newest daily series. |
 | `indicator` | Read recent history for a single FRED (Federal Reserve economic data) series — drill into anything in the macro_snapshot or any other FRED series id. Common ids: UNRATE (unemployment), DFF (Fed funds), DGS10/DGS2/DGS3MO (Treasury yields), CPIAUCSL (CPI index), CPILFESL (core CPI index), PAYEMS (nonfarm payrolls), VIXCLS (VIX), SP500, MORTGAGE30US (30y mortgage rate), WALCL (Fed balance sheet), DTWEXBGS (broad USD index), T10Y2Y/T10Y3M (curve spreads). Returns observations most-recent-first plus the latest value. |
 
 ## Quick Start
@@ -55,9 +55,45 @@ directly, instead of just this one's:
 }
 ```
 
-Both URLs reach the same gateway and the same 1476+ data sources. The
+Both URLs reach the same gateway and the same 1679+ data sources. The
 only difference is which pack's tools are listed **directly**; `ask_pipeworx`
 reaches all of them from either one.
+
+## No MCP client? Call it over HTTP
+
+```bash
+curl -X POST https://gateway.pipeworx.io/v1/tools/macro_snapshot \
+  -H 'Content-Type: application/json' \
+  -d '{}'
+```
+
+No account needed for the first calls. Inspect any tool: `GET https://gateway.pipeworx.io/v1/tools/macro_snapshot`. Find one: `POST https://gateway.pipeworx.io/v1/tools/search_packs` with `{"query":"..."}`.
+
+## Standalone (no gateway account)
+
+This package also runs as a local stdio MCP server — no Pipeworx account, no
+gateway round-trip:
+
+```json
+{
+  "mcpServers": {
+    "macro-snapshot": {
+      "command": "npx",
+      "args": ["-y", "@pipeworx/mcp-macro-snapshot"]
+    }
+  }
+}
+```
+
+Or run it directly to confirm it starts:
+
+```bash
+npx -y @pipeworx/mcp-macro-snapshot
+```
+
+It speaks MCP over stdin/stdout and answers `initialize`/`tools/list`/`tools/call`
+for **only** this pack's tools — none of the shared meta-tools the gateway
+connection above adds. Same source, same tools, no ask_pipeworx routing.
 
 ## Using with ask_pipeworx
 
@@ -78,13 +114,3 @@ The gateway picks the right tool and fills the arguments automatically.
 ## License
 
 MIT
-
-## No MCP client? Call it over HTTP
-
-```bash
-curl -X POST https://gateway.pipeworx.io/v1/tools/macro_snapshot \
-  -H 'Content-Type: application/json' \
-  -d '{}'
-```
-
-No account needed for the first calls. Inspect any tool: `GET https://gateway.pipeworx.io/v1/tools/macro_snapshot`. Find one: `POST https://gateway.pipeworx.io/v1/tools/search_packs` with `{"query":"..."}`.
