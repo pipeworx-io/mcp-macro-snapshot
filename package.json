@@ -1,6 +1,6 @@
 {
   "name": "@pipeworx/mcp-macro-snapshot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "macro-snapshot MCP — the state of the economy in one call.",
   "type": "module",
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
     "@cloudflare/workers-types": "^4.20260405.1"
   },
   "pipeworx": {
-    "sourceHash": "v1-57de3ced4680cdf6a5583f40834b78be507c4343498f7279270b574d967b809c",
-    "sourceCommit": "adb69d997f82a62e8e22b594488c7d04a227db35"
+    "sourceHash": "v1-8ed52fdc193810a17106188d8f161f7bdc61e906a9e6d3b674d100b8a4b2dc25",
+    "sourceCommit": "1064560fd9dcd0d6fc2606298c2ba244b3a1fbeb"
   }
 }
